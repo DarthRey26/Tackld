@@ -1,0 +1,47 @@
+.location-main {
+  background-color: #fafafa;
+  width: 100%;
+}
+
+.location-item {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 50vh;
+}
+
+.location-list {
+  background-color: white;
+  height: 50vh; /* Set a specific height */
+  overflow: auto; /* This will ensure that overflow works */
+}
+
+.location-list a {
+  display: block;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  color: black;
+  padding: 20px;
+  background-color: white;
+}
+
+.location-list a:focus,
+.location-list a:hover {
+  background-color: #e6e6e6;
+  transition: all 300ms;
+}
+
+.location-hours {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+}
+
+.location-button {
+  margin: 0 auto;
+  width: 100%;
+  text-align: left;
+}
+
+.map {
+  height: 50vh;
+  width: 100%;
+}
