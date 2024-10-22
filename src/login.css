@@ -197,7 +197,7 @@ input[type="radio"] {
   text-decoration: none;
   text-transform: uppercase;
   overflow: hidden;
-  transition: 0.3s;
+  transition: 0.5s;
   margin-top: 20px;
   letter-spacing: 4px;
   margin-left: 30%;
@@ -209,11 +209,11 @@ input[type="radio"] {
 }
 
 .submit-btn:hover {
-  background: #02afff;
+  background: #2563eb;
   color: #fff;
   border-radius: 5px;
-  box-shadow: 0 0 5px #02afff, 0 0 25px #02afff, 0 0 50px #02afff,
-    0 0 100px #02afff;
+  box-shadow: 0 0 5px #2563eb, 0 0 25px #2563eb, 0 0 50px #2563eb,
+    0 0 100px #2563eb;
 }
 
 .submit-btn span {
