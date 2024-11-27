@@ -69,8 +69,28 @@
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
   body {
     @apply bg-background text-foreground;
+    margin: 0;
+    padding: 0;
+    height: 100%;
   }
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
+}
+
+.min-h-screen {
+    min-height: auto;
+}
+
+.location-main {
+    padding: 20px;
+}
+
+.wrapper {
+    max-width: 800px;
+    margin: 0 auto;
 }

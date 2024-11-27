@@ -25,15 +25,15 @@ const Account = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto space-y-6">
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-blue-600">
               Account Information
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-2">
             <p>
               <span className="font-semibold">Name:</span> {user.name}
             </p>
@@ -56,7 +56,7 @@ const Account = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               {recentRequests.map((request) => (
                 <li
                   key={request.id}
