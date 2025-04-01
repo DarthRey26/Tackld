@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../login.css";
+import routes from "@/routes/routes";
 
 const customerAccounts = [{ email: "customer", password: "000000" }];
 
@@ -31,12 +32,12 @@ const LoginSignup = () => {
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("userType", "customer");
       window.dispatchEvent(new Event("storage")); // Trigger storage event manually
-      navigate("../");
+      navigate(routes.index);
     } else if (contractorAccount) {
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("userType", "contractor");
       window.dispatchEvent(new Event("storage")); // Trigger storage event manually
-      navigate("../contractor-main");
+      navigate(routes.contractorMain);
     } else {
       alert("Either Email or Password is incorrect");
     }

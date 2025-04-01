@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import routes from "@/routes/routes";
 
 const Account = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Account = () => {
     sessionStorage.removeItem("isLoggedIn");
     sessionStorage.removeItem("userType"); // Clear user type if needed
     window.dispatchEvent(new Event("storage")); // Trigger storage event manually
-    navigate("../");
+    navigate(routes.index);
   };
 
   return (

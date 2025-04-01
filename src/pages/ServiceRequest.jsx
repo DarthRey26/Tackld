@@ -9,6 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Camera, Upload, MapPin } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import routes from "@/routes/routes";
 
 const singaporeCenter = {
   lat: 1.3521,
@@ -83,7 +84,7 @@ const ServiceRequest = () => {
         description: "Please select a location on the map.",
         variant: "destructive",
       });
-      navigate("../");
+      navigate(routes.index);
     }
     // Here you would typically send the data to your server
     toast({
