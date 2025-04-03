@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import ContractorMap from "@/components/contractor/ContractorMap";
 import NewRequests from "@/components/contractor/NewRequests";
@@ -37,7 +38,24 @@ const ContractorMain = () => {
       return;
     }
 
+    // Add the contractorId to mark it as accepted, and set initial progress to 0
+    const acceptedRequest = {
+      ...request,
+      contractorId,
+      status: 'accepted',
+      progress: 0,
+      submittedAt: new Date()
+    };
+    
+    // Update the active request state immediately
+    setActiveRequest(acceptedRequest);
+    
+    // Remove from available requests
+    setNewRequests(newRequests.filter(r => r.id !== request.id));
+    
+    // Notify the server about acceptance
     socket.emit('accept_request', { requestId: request.id, contractorId });
+    
     toast({
       title: "Request Accepted",
       description: `You've accepted the service request at ${request.name}`,
@@ -45,14 +63,31 @@ const ContractorMain = () => {
   };
 
   const handleUpdateProgress = (requestId, progress) => {
+    // Update local state first for immediate feedback
+    if (activeRequest && activeRequest.id === requestId) {
+      setActiveRequest({
+        ...activeRequest,
+        progress
+      });
+    }
+    
     socket.emit('update_progress', { requestId, progress, contractorId });
     
     if (progress === 100) {
-      socket.emit('complete_request', { requestId, contractorId });
       toast({
         title: "Job Completed",
-        description: "Great work! You can now accept new requests.",
+        description: "Processing completion...",
       });
+      
+      setTimeout(() => {
+        socket.emit('complete_request', { requestId, contractorId });
+        setActiveRequest(null);
+        
+        toast({
+          title: "Job Completed",
+          description: "Great work! You can now accept new requests.",
+        });
+      }, 2000);
     }
   };
 
