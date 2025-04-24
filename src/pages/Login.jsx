@@ -32,7 +32,7 @@ const LoginSignup = () => {
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("userType", "customer");
       window.dispatchEvent(new Event("storage")); // Trigger storage event manually
-      navigate(routes.index);
+      navigate(routes.customerMain);
     } else if (contractorAccount) {
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("userType", "contractor");

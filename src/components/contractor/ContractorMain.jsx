@@ -1,12 +1,11 @@
-
 import React, { useState, useEffect } from "react";
 import ContractorMap from "@/components/contractor/ContractorMap";
 import NewRequests from "@/components/contractor/NewRequests";
 import ActiveRequest from "@/components/contractor/ActiveRequest";
 import { useToast } from "@/components/ui/use-toast";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
-const socket = io('http://localhost:3001');
+const socket = io("http://localhost:3001");
 
 const ContractorMain = () => {
   const { toast } = useToast();
@@ -15,16 +14,20 @@ const ContractorMain = () => {
   const contractorId = "contractor-1"; // In a real app, this would come from auth
 
   useEffect(() => {
-    socket.on('service_request_update', (requests) => {
-      const active = requests.find(r => r.contractorId === contractorId && r.status === 'accepted');
-      const available = requests.filter(r => !r.contractorId && r.status === 'submitted');
-      
+    socket.on("service_request_update", (requests) => {
+      const active = requests.find(
+        (r) => r.contractorId === contractorId && r.status === "accepted"
+      );
+      const available = requests.filter(
+        (r) => !r.contractorId && r.status === "submitted"
+      );
+
       setActiveRequest(active || null);
       setNewRequests(available);
     });
 
     return () => {
-      socket.off('service_request_update');
+      socket.off("service_request_update");
     };
   }, []);
 
@@ -32,8 +35,9 @@ const ContractorMain = () => {
     if (activeRequest) {
       toast({
         title: "Cannot Accept Request",
-        description: "Please complete your current job before accepting a new one.",
-        variant: "destructive"
+        description:
+          "Please complete your current job before accepting a new one.",
+        variant: "destructive",
       });
       return;
     }
@@ -42,20 +46,20 @@ const ContractorMain = () => {
     const acceptedRequest = {
       ...request,
       contractorId,
-      status: 'accepted',
+      status: "accepted",
       progress: 0,
-      submittedAt: new Date()
+      submittedAt: new Date(),
     };
-    
+
     // Update the active request state immediately
     setActiveRequest(acceptedRequest);
-    
+
     // Remove from available requests
-    setNewRequests(newRequests.filter(r => r.id !== request.id));
-    
+    setNewRequests(newRequests.filter((r) => r.id !== request.id));
+
     // Notify the server about acceptance
-    socket.emit('accept_request', { requestId: request.id, contractorId });
-    
+    socket.emit("accept_request", { requestId: request.id, contractorId });
+
     toast({
       title: "Request Accepted",
       description: `You've accepted the service request at ${request.name}`,
@@ -67,22 +71,22 @@ const ContractorMain = () => {
     if (activeRequest && activeRequest.id === requestId) {
       setActiveRequest({
         ...activeRequest,
-        progress
+        progress,
       });
     }
-    
-    socket.emit('update_progress', { requestId, progress, contractorId });
-    
+
+    socket.emit("update_progress", { requestId, progress, contractorId });
+
     if (progress === 100) {
       toast({
         title: "Job Completed",
         description: "Processing completion...",
       });
-      
+
       setTimeout(() => {
-        socket.emit('complete_request', { requestId, contractorId });
+        socket.emit("complete_request", { requestId, contractorId });
         setActiveRequest(null);
-        
+
         toast({
           title: "Job Completed",
           description: "Great work! You can now accept new requests.",
@@ -111,7 +115,9 @@ const ContractorMain = () => {
           )}
         </div>
         <div>
-          <ContractorMap mapSrc={activeRequest?.mapSrc || newRequests[0]?.mapSrc} />
+          <ContractorMap
+            mapSrc={activeRequest?.mapSrc || newRequests[0]?.mapSrc}
+          />
         </div>
       </div>
     </div>

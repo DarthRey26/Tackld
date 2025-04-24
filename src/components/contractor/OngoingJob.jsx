@@ -1,10 +1,32 @@
-
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { MapPin, DollarSign, Clock, Wrench, Calendar, Plus, AlertTriangle, Camera, Check, Loader2 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  MapPin,
+  DollarSign,
+  Clock,
+  Wrench,
+  Calendar,
+  Plus,
+  AlertTriangle,
+  Camera,
+  Check,
+  Loader2,
+} from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -12,10 +34,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 
 const JobStages = {
-  ARRIVAL: { id: 'arrival', name: 'Arrival Confirmation', progress: 25 },
-  MIDWAY: { id: 'midway', name: 'Midway Check-in', progress: 50 },
-  COMPLETION: { id: 'completion', name: 'Completion Check', progress: 75 },
-  PAYMENT: { id: 'payment', name: 'Payment Confirmation', progress: 100 }
+  ARRIVAL: { id: "arrival", name: "Arrival Confirmation", progress: 25 },
+  MIDWAY: { id: "midway", name: "Midway Check-in", progress: 50 },
+  COMPLETION: { id: "completion", name: "Completion Check", progress: 75 },
+  PAYMENT: { id: "payment", name: "Payment Confirmation", progress: 100 },
 };
 
 const OngoingJob = ({ job, onComplete, onCancel }) => {
@@ -28,74 +50,77 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState({});
   const [additionalParts, setAdditionalParts] = useState([]);
-  const [newPart, setNewPart] = useState({ name: '', price: '' });
-  const [rescheduleDate, setRescheduleDate] = useState('');
-  const [rescheduleReason, setRescheduleReason] = useState('');
-  const [cancelReason, setCancelReason] = useState('');
+  const [newPart, setNewPart] = useState({ name: "", price: "" });
+  const [rescheduleDate, setRescheduleDate] = useState("");
+  const [rescheduleReason, setRescheduleReason] = useState("");
+  const [cancelReason, setCancelReason] = useState("");
   const [uploadedImages, setUploadedImages] = useState({});
   const [walletBalance, setWalletBalance] = useState(0);
   const [autoUpdating, setAutoUpdating] = useState(false);
-  
+
   useEffect(() => {
     // Initialize from job data if available
     if (job) {
       setProgress(job.progress || 0);
       // Get wallet balance (in a real app, this would come from the server)
-      const storedBalance = localStorage.getItem('contractorWalletBalance') || '0';
+      const storedBalance =
+        localStorage.getItem("contractorWalletBalance") || "0";
       setWalletBalance(parseFloat(storedBalance));
     }
   }, [job]);
-  
+
   const handleStageComplete = (stage) => {
     setCurrentStage(stage);
-    setVerificationStatus(prev => ({ ...prev, [stage.id]: 'pending' }));
-    
+    setVerificationStatus((prev) => ({ ...prev, [stage.id]: "pending" }));
+
     // Simulate upload if there's an image
     if (uploadedImages[stage.id]) {
       setIsUploading(true);
       setTimeout(() => {
         setIsUploading(false);
         simulateVerification(stage);
-      }, 2000);
+      }, 500);
     } else {
       simulateVerification(stage);
     }
   };
-  
+
   const simulateVerification = (stage) => {
     // Show verification in progress
     toast({
       title: "Verification in Progress",
       description: "Customer is verifying your update...",
     });
-    
+
     // After 5 seconds, update status to verified
     setAutoUpdating(true);
     setTimeout(() => {
-      setVerificationStatus(prev => ({ ...prev, [stage.id]: 'verified' }));
+      setVerificationStatus((prev) => ({ ...prev, [stage.id]: "verified" }));
       setProgress(stage.progress);
-      
+
       if (stage.progress === 100) {
         // Process payment
-        const jobTotal = job.price + additionalParts.reduce((sum, part) => sum + Number(part.price), 0);
+        const jobTotal =
+          job.price +
+          additionalParts.reduce((sum, part) => sum + Number(part.price), 0);
         const newBalance = walletBalance + jobTotal;
         setWalletBalance(newBalance);
-        localStorage.setItem('contractorWalletBalance', newBalance.toString());
-        
+        localStorage.setItem("contractorWalletBalance", newBalance.toString());
+
         // Show payment confirmation
         toast({
           title: "Payment Released",
           description: `$${jobTotal.toFixed(2)} has been added to your wallet!`,
           variant: "success",
         });
-        
+
         // Wait before completing the job
         setTimeout(() => {
           onComplete({
-            ...job, 
+            ...job,
             additionalParts,
             totalPaid: jobTotal,
-            completedAt: new Date().toLocaleDateString()
+            completedAt: new Date().toLocaleDateString(),
           });
         }, 1500);
       } else {
@@ -106,39 +131,39 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
         });
       }
       setAutoUpdating(false);
-    }, 5000);
+    }, 500);
   };
-  
+
   const getNextStage = (stage) => {
-    if (stage.id === 'arrival') return JobStages.MIDWAY;
-    if (stage.id === 'midway') return JobStages.COMPLETION;
-    if (stage.id === 'completion') return JobStages.PAYMENT;
+    if (stage.id === "arrival") return JobStages.MIDWAY;
+    if (stage.id === "midway") return JobStages.COMPLETION;
+    if (stage.id === "completion") return JobStages.PAYMENT;
     return null;
   };
-  
+
   const handleImageUpload = (stage) => {
     // Simulate image upload with a random image URL
     // In a real app, this would be an actual upload
     const randomImage = `https://source.unsplash.com/random/300x200?service&${Math.random()}`;
-    setUploadedImages(prev => ({ ...prev, [stage]: randomImage }));
-    
+    setUploadedImages((prev) => ({ ...prev, [stage]: randomImage }));
+
     toast({
       title: "Image Uploaded",
       description: "Your proof image has been successfully uploaded.",
     });
   };
-  
+
   const handleAddPart = () => {
     if (!newPart.name || !newPart.price) return;
     setAdditionalParts([...additionalParts, newPart]);
-    setNewPart({ name: '', price: '' });
+    setNewPart({ name: "", price: "" });
     toast({
       title: "Part Added",
       description: `${newPart.name} has been added to the job.`,
     });
     setIsAddingParts(false);
   };
-  
+
   const handleReschedule = () => {
     if (!rescheduleDate || !rescheduleReason) return;
     toast({
@@ -147,7 +172,7 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
     });
     setIsRescheduling(false);
   };
-  
+
   const handleCancelConfirm = () => {
     if (!cancelReason) return;
     toast({
@@ -196,19 +221,31 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
                 </ul>
                 <div className="flex justify-between font-medium text-sm mt-1">
                   <span>Total Job Amount:</span>
-                  <span>${job.price + additionalParts.reduce((sum, part) => sum + Number(part.price), 0)}</span>
+                  <span>
+                    $
+                    {job.price +
+                      additionalParts.reduce(
+                        (sum, part) => sum + Number(part.price),
+                        0
+                      )}
+                  </span>
                 </div>
               </div>
             )}
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span>Progress</span>
               <span>{progress}%</span>
             </div>
-            <Progress value={progress} className={`w-full h-2 ${autoUpdating ? 'animate-pulse bg-blue-200' : ''}`} />
-            
+            <Progress
+              value={progress}
+              className={`w-full h-2 ${
+                autoUpdating ? "animate-pulse bg-blue-200" : ""
+              }`}
+            />
+
             <div className="grid grid-cols-2 gap-2 mt-4">
               {Object.values(JobStages).map((stage) => (
                 <div key={stage.id} className="flex flex-col space-y-1">
@@ -216,46 +253,46 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
                     onClick={() => handleStageComplete(stage)}
                     variant={progress >= stage.progress ? "default" : "outline"}
                     disabled={
-                      (progress === 0 && stage.id !== 'arrival') || 
+                      (progress === 0 && stage.id !== "arrival") ||
                       (progress < stage.progress - 25 && progress !== 0) ||
-                      verificationStatus[stage.id] === 'pending' ||
+                      verificationStatus[stage.id] === "pending" ||
                       autoUpdating
                     }
                     className="flex flex-col items-center p-2 h-auto relative"
                   >
-                    {verificationStatus[stage.id] === 'pending' && (
+                    {verificationStatus[stage.id] === "pending" && (
                       <Loader2 className="h-4 w-4 absolute top-1 right-1 animate-spin text-yellow-500" />
                     )}
-                    {verificationStatus[stage.id] === 'verified' && (
+                    {verificationStatus[stage.id] === "verified" && (
                       <Check className="h-4 w-4 absolute top-1 right-1 text-green-500" />
                     )}
                     <span className="text-xs">{stage.name}</span>
                     <span className="text-lg font-bold">{stage.progress}%</span>
                   </Button>
-                  
+
                   {/* Photo upload button */}
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="flex items-center gap-1 text-xs"
                     onClick={() => handleImageUpload(stage.id)}
                     disabled={
-                      (progress === 0 && stage.id !== 'arrival') || 
+                      (progress === 0 && stage.id !== "arrival") ||
                       (progress < stage.progress - 25 && progress !== 0) ||
-                      verificationStatus[stage.id] === 'pending' ||
+                      verificationStatus[stage.id] === "pending" ||
                       autoUpdating
                     }
                   >
-                    <Camera className="h-3 w-3" /> 
-                    {uploadedImages[stage.id] ? 'Change Photo' : 'Add Photo'}
+                    <Camera className="h-3 w-3" />
+                    {uploadedImages[stage.id] ? "Change Photo" : "Add Photo"}
                   </Button>
-                  
+
                   {/* Show image preview if uploaded */}
                   {uploadedImages[stage.id] && (
                     <div className="relative h-20 mt-1 rounded overflow-hidden">
-                      <img 
-                        src={uploadedImages[stage.id]} 
-                        alt={`Proof for ${stage.name}`} 
+                      <img
+                        src={uploadedImages[stage.id]}
+                        alt={`Proof for ${stage.name}`}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -267,8 +304,8 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
         </CardContent>
         <CardFooter className="flex flex-wrap gap-2 justify-between">
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
               onClick={() => setIsAddingParts(true)}
               className="flex items-center gap-1"
@@ -276,8 +313,8 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
             >
               <Plus className="h-4 w-4" /> Add Parts
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
               onClick={() => setIsRescheduling(true)}
               className="flex items-center gap-1"
@@ -286,8 +323,8 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
               <Calendar className="h-4 w-4" /> Reschedule
             </Button>
           </div>
-          <Button 
-            variant="destructive" 
+          <Button
+            variant="destructive"
             size="sm"
             onClick={() => setIsCancelling(true)}
             className="flex items-center gap-1"
@@ -297,11 +334,13 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
           </Button>
         </CardFooter>
       </Card>
-      
+
       {/* Wallet and Earnings Card */}
       <Card>
         <CardHeader className="bg-green-50">
-          <CardTitle className="text-lg font-bold text-green-600">Wallet & Earnings</CardTitle>
+          <CardTitle className="text-lg font-bold text-green-600">
+            Wallet & Earnings
+          </CardTitle>
         </CardHeader>
         <CardContent className="p-4">
           <div className="flex items-center justify-between py-2">
@@ -309,15 +348,28 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
               <DollarSign className="h-5 w-5 text-green-500" />
               <span className="font-semibold">Current Balance:</span>
             </div>
-            <span className="text-xl font-bold text-green-600">${walletBalance.toFixed(2)}</span>
+            <span className="text-xl font-bold text-green-600">
+              ${walletBalance.toFixed(2)}
+            </span>
           </div>
           <div className="text-sm text-gray-500 border-t pt-2 mt-2">
-            <p>Potential earnings from this job: ${(job.price + additionalParts.reduce((sum, part) => sum + Number(part.price), 0)).toFixed(2)}</p>
-            <p className="mt-1">Funds are released after job completion and customer verification.</p>
+            <p>
+              Potential earnings from this job: $
+              {(
+                job.price +
+                additionalParts.reduce(
+                  (sum, part) => sum + Number(part.price),
+                  0
+                )
+              ).toFixed(2)}
+            </p>
+            <p className="mt-1">
+              Funds are released after job completion and customer verification.
+            </p>
           </div>
         </CardContent>
       </Card>
-      
+
       {/* Add Parts Dialog */}
       <Dialog open={isAddingParts} onOpenChange={setIsAddingParts}>
         <DialogContent>
@@ -330,7 +382,9 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
               <Input
                 id="partName"
                 value={newPart.name}
-                onChange={(e) => setNewPart({...newPart, name: e.target.value})}
+                onChange={(e) =>
+                  setNewPart({ ...newPart, name: e.target.value })
+                }
                 placeholder="e.g., Water filter"
               />
             </div>
@@ -340,7 +394,9 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
                 id="partPrice"
                 type="number"
                 value={newPart.price}
-                onChange={(e) => setNewPart({...newPart, price: e.target.value})}
+                onChange={(e) =>
+                  setNewPart({ ...newPart, price: e.target.value })
+                }
                 placeholder="0.00"
               />
             </div>
@@ -350,7 +406,7 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      
+
       {/* Reschedule Dialog */}
       <Dialog open={isRescheduling} onOpenChange={setIsRescheduling}>
         <DialogContent>
@@ -383,7 +439,7 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      
+
       {/* Cancel Dialog */}
       <Dialog open={isCancelling} onOpenChange={setIsCancelling}>
         <DialogContent>
@@ -393,7 +449,10 @@ const OngoingJob = ({ job, onComplete, onCancel }) => {
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
-            <p className="text-amber-600">Warning: Cancelling a job may affect your reputation on the platform.</p>
+            <p className="text-amber-600">
+              Warning: Cancelling a job may affect your reputation on the
+              platform.
+            </p>
             <div className="space-y-2">
               <Label htmlFor="cancelReason">Reason for Cancellation</Label>
               <Textarea

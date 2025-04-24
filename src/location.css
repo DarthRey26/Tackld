@@ -45,3 +45,14 @@
   height: 50vh;
   width: 100%;
 }
+
+.reveal {
+  opacity: 0;
+  transform: translateX(9rem); /* ~translate-x-36 */
+  transition: all 1s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateX(0);
+}

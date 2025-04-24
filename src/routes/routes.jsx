@@ -4,6 +4,7 @@ const routes = {
   contractorMain: "/contractor-main",
   login: "/login",
   serviceRequest: "/service-request",
+  customerMain: "/customer-main",
 };
 
 export default routes;
