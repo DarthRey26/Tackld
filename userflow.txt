@@ -1,0 +1,161 @@
+You are enhancing a front-end demo for Tackld — a booking platform for service professionals. Your job is to verify that the current implementation satisfies all listed user actions, and add or fix features with proper UI/UX design if not.
+
+🔍 TASK 1: Progress Bar Logic (Customer Side)
+A green animated progress bar must:
+
+Appear only when a booking is made.
+
+Start from the left edge of the search bar and end at the right edge of the category dropdown.
+
+Be clickable with stage indicators:
+
+Finding Contractors
+
+Bidding in Progress
+
+Contractor Assigned
+
+Job In Progress
+
+Job Completed
+
+Payment Confirmation
+
+Each stage should:
+
+Include a 5-second delay to simulate real time.
+
+Have a tooltip or modal with short status info when clicked.
+
+Upon job completion, show a “Pay Now” button (simulate payment).
+
+After payment, progress bar disappears and job is moved to History.
+
+🧾 TASK 2: Booking Flow Enhancements
+When a customer clicks “Book Service”:
+
+Show a booking form modal or page:
+
+Time/date selector
+
+Upload image (e.g., for cleaning or repairs)
+
+Live image preview
+
+Special notes
+
+“Confirm Booking” button
+
+Add logic: if the customer tries to click out mid-booking, show a warning popup (“Are you sure you want to discard this booking?”).
+
+🧑‍💼 TASK 3: Contractor Side Logic
+On receiving a job:
+
+Show job card in New Jobs tab with details and customer image.
+
+Contractor must:
+
+Submit bid with amount and optional message
+
+Wait for customer to accept bid
+
+Once accepted:
+
+Move job to Current Job tab.
+
+Unlock stage controls:
+
+Arrival Confirmation (upload photo)
+
+Midway Check-in (upload photo)
+
+Completion Check (upload photo)
+
+Payment Confirmation (triggered after customer pays)
+
+If contractor clicks out without uploading images or confirming stage → retain job state and restore upon return.
+
+📂 TASK 4: History & Review Tabs
+Add “History” tab next to Home and Account buttons for customers.
+
+Shows:
+
+Previous jobs
+
+Dates
+
+Contractors
+
+Images uploaded
+
+Review left or pending
+
+Add “Leave Review” button for completed jobs.
+
+👤 TASK 5: Customer Account Page Additions
+Ensure the account page includes:
+
+Name
+
+Profile photo
+
+Preferred service categories
+
+Past booking frequency
+
+Wallet balance + Voucher redemption history
+
+Saved addresses
+
+Contact info (editable)
+
+Toggle: auto-assign contractor / review bids
+
+Notification preferences
+
+Deactivate account
+
+🛠 TASK 6: UX Fail-safes / Break-proofing
+Any modal/form (booking, upload, bidding) should:
+
+Prompt confirmation before closing if user input is present.
+
+Retain input if accidentally closed (auto-draft).
+
+No screen should crash or break on:
+
+Back button
+
+Page refresh
+
+Cancel actions
+
+All clickable buttons must:
+
+Have hover/active states
+
+Disable when loading (simulate async loading)
+
+Trigger simulated loading spinners for realism
+
+🎨 TASK 7: UI/UX Polish
+Ensure:
+
+Consistent font sizing and colors
+
+Service cards are evenly spaced, mobile responsive
+
+Buttons use shadows and hover effects
+
+Image upload areas use drag-and-drop or file picker
+
+Tooltips and progress indicators use soft animations (Framer Motion or similar)
+
+After implementing, run internal logic checks:
+
+Does the user always know what the next action is?
+
+Can users recover from accidental exits?
+
+Are all buttons, images, and stages connected to an action?
+
