@@ -84,7 +84,7 @@ const ServiceRequest = () => {
         description: "Please select a location on the map.",
         variant: "destructive",
       });
-      navigate(routes.index);
+      navigate(routes.customerMain);
     }
     // Here you would typically send the data to your server
     toast({
