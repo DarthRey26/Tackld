@@ -5,6 +5,7 @@ const routes = {
   login: "/login",
   serviceRequest: "/service-request",
   customerMain: "/customer-main",
+  jobDetail: "/job-detail",
 };
 
 export default routes;

@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
-import { Camera, Upload, MapPin } from "lucide-react";
+import { Camera, Upload, MapPin, Star, DollarSign } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import routes from "@/routes/routes";
@@ -35,6 +35,7 @@ const ServiceRequest = () => {
     minPrice: 50,
     maxPrice: 200,
     location: null,
+    contractorType: "recommended", // Added contractor type field
   });
 
   const navigate = useNavigate();
@@ -78,6 +79,9 @@ const ServiceRequest = () => {
   };
 
   const handleSubmit = () => {
+    // Saving formData to sessionStorage
+    sessionStorage.setItem("isJobInProgress", "true");
+    sessionStorage.setItem("latestJob", JSON.stringify(formData));
     if (!selectedLocation) {
       toast({
         title: "Location Required",
@@ -85,6 +89,7 @@ const ServiceRequest = () => {
         variant: "destructive",
       });
       navigate(routes.customerMain);
+      return;
     }
     // Here you would typically send the data to your server
     toast({
@@ -97,7 +102,7 @@ const ServiceRequest = () => {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center text-blue-600">
+          <CardTitle className="text-2xl font-bold text-center text-[#283579]">
             Book Service
           </CardTitle>
         </CardHeader>
@@ -196,6 +201,50 @@ const ServiceRequest = () => {
                       rows={4}
                     />
                   </div>
+                  {/* Contractor Type */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Select Contractor Type
+                    </label>
+                    <div className="flex gap-4">
+                      <Button
+                        type="button"
+                        variant={
+                          formData.contractorType === "recommended"
+                            ? "default"
+                            : "outline"
+                        }
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            contractorType: "recommended",
+                          }))
+                        }
+                        className="flex items-center gap-2"
+                      >
+                        <Star className="text-yellow-500 w-4 h-4" />
+                        Recommended
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={
+                          formData.contractorType === "saver"
+                            ? "default"
+                            : "outline"
+                        }
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            contractorType: "saver",
+                          }))
+                        }
+                        className="flex items-center gap-2 py-5 px-8"
+                      >
+                        <DollarSign className="text-green-500 w-4 h-4" />
+                        Saver
+                      </Button>
+                    </div>
+                  </div>
                 </div>
                 <div className="space-y-4">
                   <div>
@@ -216,7 +265,7 @@ const ServiceRequest = () => {
                             <div className="flex text-sm text-gray-600">
                               <label
                                 htmlFor="file-upload"
-                                className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500"
+                                className="relative cursor-pointer bg-white rounded-md font-medium text-[#283579] hover:text-blue-500"
                               >
                                 <span>Upload a file</span>
                                 <input
@@ -274,7 +323,7 @@ const ServiceRequest = () => {
             <div onClick={handleSubmit}>
               <Button
                 type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-600"
+                className="w-full bg-[#283579] hover:bg-blue-600"
               >
                 Submit Request
               </Button>

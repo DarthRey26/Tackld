@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import routes from "@/routes/routes";
 import {
   Card,
   CardContent,
@@ -25,63 +27,55 @@ import {
   Search,
   Zap,
   Trash,
+  Paintbrush,
   Wallet,
   Star,
   Gift,
   Heart,
   Clock,
   ThumbsUp,
+  ActivityIcon,
+  History,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import AnimatedDots from "@/components/ui/animated-dots";
+import "../index.css";
 
 const services = [
   {
     id: 1,
-    name: "Air Conditioning Repair",
+    name: "Air Conditioning",
     icon: Wrench,
     description: "Fix or maintain your AC unit",
-    category: "Home Maintenance",
-    rating: 4.5,
+    category: "Property Maintenance",
   },
   {
     id: 2,
     name: "Plumbing Services",
     icon: Droplet,
     description: "Resolve any plumbing issues",
-    category: "Home Maintenance",
-    rating: 4.2,
+    category: "Property Maintenance",
   },
   {
     id: 3,
-    name: "Car Wash",
-    icon: Car,
-    description: "Get your car cleaned and shining",
-    category: "Automotive",
-    rating: 4.7,
-  },
-  {
-    id: 4,
     name: "House Cleaning",
     icon: Home,
     description: "Professional house cleaning services",
     category: "Cleaning",
-    rating: 4.8,
   },
   {
-    id: 5,
+    id: 4,
     name: "Electrical Services",
     icon: Zap,
     description: "Electrical repairs and installations",
-    category: "Home Maintenance",
-    rating: 4.3,
+    category: "Property Maintenance",
   },
   {
-    id: 6,
-    name: "Waste Removal",
-    icon: Trash,
-    description: "Efficient waste removal and disposal",
-    category: "Home Maintenance",
-    rating: 4.1,
+    id: 5,
+    name: "Painting",
+    icon: Paintbrush,
+    description: "Interior painting services",
+    category: "Property Maintenance",
   },
 ];
 
@@ -113,23 +107,20 @@ const ServiceCard = ({ service }) => {
         <p className="text-sm mt-2 font-semibold text-[#283579]">
           {service.category}
         </p>
-        {isLoading ? (
-          <p className="text-sm mt-2">Loading available providers...</p>
-        ) : (
-          <div className="mt-2">
-            <p className="text-sm font-semibold">
-              {availableProviders} providers available
-            </p>
-            <div className="flex items-center mt-1">
-              <Star className="h-4 w-4 text-yellow-400 mr-1" />
-              <span className="text-sm">{service.rating.toFixed(1)}</span>
-            </div>
-          </div>
-        )}
         <div className="mt-2 flex items-center text-green-600">
           <Clock className="h-4 w-4 mr-1" />
           <span className="text-xs font-semibold">Available Now</span>
         </div>
+        {isLoading ? (
+          <p className="text-sm mt-2">Loading available providers...</p>
+        ) : (
+          <div className="mt-2 mb-2">
+            <p className="text-sm font-semibold">
+              {availableProviders}{" "}
+              {availableProviders === 1 ? "provider" : "providers"} available
+            </p>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <Link to={`/request/${service.id}`} className="flex-grow">
@@ -163,32 +154,85 @@ const Sidebar = () => (
       <span>Redeem Vouchers</span>
     </Button>
     <Button variant="ghost" className="w-full justify-start hover:bg-red-100">
-      <Heart className="h-5 w-5 text-red-500 mr-2" />
-      <span>Favorite Services</span>
+      <History className="h-5 w-5 text-red-500 mr-2" />
+      <span>Activity</span>
     </Button>
   </div>
 );
 
-const RecommendedServices = () => (
-  <div className="bg-blue-50 p-4 rounded-lg mt-4">
-    <h3 className="text-lg font-semibold mb-2 flex items-center">
-      <ThumbsUp className="h-5 w-5 text-blue-500 mr-2" />
-      Recommended Services
-    </h3>
-    <ul className="space-y-2">
-      {services.slice(0, 3).map((service) => (
-        <li key={service.id} className="flex items-center">
-          <service.icon className="h-4 w-4 text-[#283579] mr-2" />
-          <span className="text-sm">{service.name}</span>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
+const CurrentJobSummary = () => {
+  const navigate = useNavigate();
+  const [currentJob, setCurrentJob] = useState(null);
+
+  useEffect(() => {
+    const storedJob = sessionStorage.getItem("currentJob");
+    if (storedJob) {
+      setCurrentJob(JSON.parse(storedJob));
+    }
+  }, []);
+
+  if (!currentJob) return null;
+
+  return (
+    <div
+      className="bg-white p-4 rounded-lg border border-gray-200 shadow hover:shadow-md transition cursor-pointer"
+      onClick={() => navigate(routes.jobDetail)}
+    >
+      <h3 className="text-lg font-semibold mb-2 text-[#283579] flex items-center">
+        <ActivityIcon className="h-5 w-5 mr-2" />
+        Current Job Summary
+      </h3>
+      <div className="text-sm space-y-1">
+        <p>
+          <span className="font-medium">Service:</span> {currentJob.serviceName}
+        </p>
+        <p>
+          <span className="font-medium">Category:</span> {currentJob.category}
+        </p>
+        <p className="line-clamp-2">
+          <span className="font-medium">Description:</span>{" "}
+          {currentJob.description}
+        </p>
+        {currentJob.image && (
+          <img
+            src={currentJob.image}
+            alt="Job"
+            className="mt-2 rounded-md max-h-40 w-full object-cover"
+          />
+        )}
+      </div>
+      <div className="text-right mt-3">
+        <span className="text-blue-600 font-medium">View Details →</span>
+      </div>
+    </div>
+  );
+};
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [isJobInProgress, setIsJobInProgress] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkJobStatus = () => {
+      const inProgress = sessionStorage.getItem("isJobInProgress");
+      setIsJobInProgress(inProgress === "true");
+    };
+
+    checkJobStatus(); // Run on mount
+
+    const handleStorageChange = () => {
+      checkJobStatus(); // Re-check on sessionStorage change
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const filteredServices = services.filter(
     (service) =>
@@ -212,17 +256,36 @@ const Index = () => {
         <div className="flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8">
           <div className="w-full md:w-1/4 space-y-4">
             <Sidebar />
-            <RecommendedServices />
+            <CurrentJobSummary />
           </div>
           <div className="w-full md:w-3/4">
-            <div className="mb-8 flex flex-col sm:flex-row gap-4">
+            {isJobInProgress && (
+              <div
+                onClick={() => {
+                  console.log("Card clicked");
+                  navigate(routes.jobDetail);
+                }}
+                className="bg-green-500 text-white font-bold rounded-lg px-6 py-7 flex items-center justify-between mb-6 cursor-pointer hover:bg-green-600 transition"
+              >
+                <div className="flex items-center gap-3">
+                  <Clock className="w-6 h-6" />
+                  <span className="text-lg">
+                    Waiting for contractors
+                    <AnimatedDots />
+                  </span>
+                </div>
+                <span className="text-white font-semibold">View</span>
+              </div>
+            )}
+
+            <div className="mb-6 flex flex-col sm:flex-row gap-4">
               <div className="relative flex-grow">
                 <Input
                   type="text"
                   placeholder="Search services..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border-2 border-blue-300 focus:border-blue-500 rounded-full w-full"
+                  className="pl-10 pr-4 py-2 rounded-full w-full focus:outline-none focus:ring-0"
                 />
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               </div>

@@ -5,6 +5,7 @@ import Account from "../pages/Account"; // Add other routes as needed
 import LoginSignup from "../pages/Login"; // Add other routes as needed
 import ContractorMain from "../pages/ContractorMain"; // Add this or other routes
 import CustomerMain from "../pages/CustomerMain"; // Add this or other routes
+import JobDetail from "../pages/JobDetail"; // Add this or other routes
 
 const AppRoutes = () => (
   <Routes>
@@ -14,6 +15,7 @@ const AppRoutes = () => (
     <Route path="/login" element={<LoginSignup />} />
     <Route path="/contractor-main" element={<ContractorMain />} />
     <Route path="/customer-main" element={<CustomerMain />} />
+    <Route path="/job-detail" element={<JobDetail />} />
   </Routes>
 );
 
