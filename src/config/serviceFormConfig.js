@@ -1,0 +1,242 @@
+export const serviceFormConfig = {
+  1: {
+    bookingTypes: ["Open Tender", "Saver", "Tackld’s Choice"],
+    questions: [
+      {
+        label: "What type of service?",
+        name: "serviceType",
+        type: "radio",
+        options: ["Servicing", "Repair", "Installation"],
+      },
+      { label: "How many units?", name: "unitCount", type: "number" },
+      {
+        label: "Unit Type?",
+        name: "unitType",
+        type: "dropdown",
+        options: ["Wall-mounted", "Cassette", "Window", "Portable"],
+      },
+      { label: "Unit age (if known)?", name: "unitAge", type: "number" },
+      {
+        label: "Any known issues?",
+        name: "knownIssues",
+        type: "textarea",
+        optional: true,
+      },
+      {
+        label: "Is this HDB, Condo, or Landed?",
+        name: "propertyType",
+        type: "dropdown",
+        options: ["HDB", "Condo", "Landed"],
+      },
+      {
+        label: "Image of unit & model number",
+        name: "unitImage",
+        type: "file",
+      },
+      {
+        condition: { field: "serviceType", value: "Installation" },
+        label: "Is piping already installed?",
+        name: "hasPiping",
+        type: "radio",
+        options: ["Yes", "No"],
+      },
+      {
+        condition: { field: "serviceType", value: "Repair" },
+        label: "Describe the fault",
+        name: "repairDescription",
+        type: "textarea",
+        optional: true,
+      },
+      {
+        condition: { field: "serviceType", value: "Repair" },
+        label: "Attach a video (optional)",
+        name: "repairVideo",
+        type: "file",
+        optional: true,
+      },
+    ],
+  },
+  2: {
+    bookingTypes: ["Open Tender", "Saver", "Tackld’s Choice"],
+    questions: [
+      {
+        label: "What needs to be done?",
+        name: "taskType",
+        type: "radio",
+        options: ["Repair", "Installation"],
+      },
+      {
+        label: "What are affected?",
+        name: "affectedItems",
+        type: "checkbox",
+        options: ["Sink", "Toilet", "Tap", "Floor Trap", "Piping", "Heater"],
+      },
+      {
+        label: "How many appliances affected?",
+        name: "applianceCount",
+        type: "number",
+      },
+      {
+        label: "Water valve accessible?",
+        name: "valveAccessible",
+        type: "radio",
+        options: ["Yes", "No"],
+      },
+      {
+        label: "Is this urgent or emergency?",
+        name: "urgency",
+        type: "dropdown",
+        options: ["Normal", "Urgent", "Emergency"],
+      },
+      {
+        label: "Image(s) of affected area",
+        name: "areaImages",
+        type: "file",
+        multiple: true,
+      },
+    ],
+  },
+  3: {
+    bookingTypes: ["Open Tender", "Saver", "Tackld’s Choice"],
+    questions: [
+      {
+        label: "What do you need?",
+        name: "electricalNeed",
+        type: "radio",
+        options: ["Repair only"],
+      },
+      {
+        label: "Type of issue or item?",
+        name: "electricalItems",
+        type: "checkbox",
+        options: ["Power socket", "Fan", "Light", "Heater", "Oven", "Circuit"],
+      },
+      {
+        label: "Any power failure?",
+        name: "powerFailure",
+        type: "radio",
+        options: ["Yes", "No"],
+      },
+      {
+        label: "Do you already have the part?",
+        name: "havePart",
+        type: "radio",
+        options: ["Yes", "No"],
+      },
+      {
+        label: "Do you need help sourcing a part?",
+        name: "needHelpPart",
+        type: "radio",
+        options: ["Yes", "No"],
+        optional: true,
+      },
+      {
+        label: "Image of affected fixture or area",
+        name: "fixtureImage",
+        type: "file",
+        multiple: true,
+      },
+    ],
+  },
+  4: {
+    bookingTypes: ["Open Tender", "Saver", "Tackld’s Choice"],
+    questions: [
+      {
+        label: "Type of cleaning?",
+        name: "cleaningType",
+        type: "radio",
+        options: ["General", "Post-Reno", "Move-in/out"],
+      },
+      {
+        label: "Property type?",
+        name: "cleaningPropertyType",
+        type: "dropdown",
+        options: ["HDB", "Condo", "Landed", "Office"],
+      },
+      { label: "How many rooms?", name: "roomCount", type: "number" },
+      {
+        label: "How many hours?",
+        name: "cleaningHours",
+        type: "dropdown",
+        options: ["1", "2", "3", "4", "5+"],
+      },
+      {
+        label: "Areas of focus?",
+        name: "focusAreas",
+        type: "checkbox",
+        options: ["Kitchen", "Windows", "Toilet", "Fans"],
+      },
+      {
+        label: "Do you have cleaning tools?",
+        name: "hasTools",
+        type: "radio",
+        options: ["Yes", "No"],
+      },
+      {
+        label: "Upload images of area to be cleaned",
+        name: "cleaningImages",
+        type: "file",
+        multiple: true,
+      },
+    ],
+  },
+  5: {
+    bookingTypes: ["Fixed"],
+    fixedFee: 35,
+    questions: [
+      {
+        label: "What type of property?",
+        name: "paintingPropertyType",
+        type: "dropdown",
+        options: ["HDB", "Condo", "Landed", "Office"],
+      },
+      {
+        label: "How many rooms do you want painted?",
+        name: "paintingRoomCount",
+        type: "number",
+      },
+      {
+        label: "Type of painting?",
+        name: "paintingType",
+        type: "radio",
+        options: ["Interior", "Exterior", "Both"],
+      },
+      {
+        label: "Estimated size of area?",
+        name: "paintingAreaSize",
+        type: "numberWithUnit",
+        units: ["sqm", "sqft"],
+      },
+      {
+        label: "Do you need wrapping services?",
+        name: "wrappingService",
+        type: "radio",
+        options: ["Yes", "No"],
+      },
+      {
+        label: "Do you already have a preferred paint?",
+        name: "preferredPaint",
+        type: "radio",
+        options: ["Yes", "No"],
+      },
+      {
+        condition: { field: "preferredPaint", value: "Yes" },
+        label: "If yes, what brand/type?",
+        name: "paintBrand",
+        type: "text",
+      },
+      {
+        label: "Upload layout photos and rooms",
+        name: "layoutPhotos",
+        type: "file",
+        multiple: true,
+      },
+      {
+        label: "Choose colour palette",
+        name: "colorPalette",
+        type: "dropdown",
+        options: ["Warm Tones", "Cool Tones", "Neutral", "Custom"],
+      },
+    ],
+  },
+};

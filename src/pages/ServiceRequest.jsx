@@ -10,6 +10,7 @@ import { Camera, Upload, MapPin, Star, DollarSign } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import routes from "@/routes/routes";
+import { serviceFormConfig } from "@/config/serviceFormConfig";
 
 const singaporeCenter = {
   lat: 1.3521,
@@ -23,6 +24,7 @@ const mapContainerStyle = {
 
 const ServiceRequest = () => {
   const { serviceId } = useParams();
+  const config = serviceFormConfig[serviceId];
   const { toast } = useToast();
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [formData, setFormData] = useState({
@@ -102,7 +104,7 @@ const ServiceRequest = () => {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="max-w-4xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center text-[#283579]">
+          <CardTitle className="text-3xl font-bold text-center text-[#283579]">
             Book Service
           </CardTitle>
         </CardHeader>
@@ -133,6 +135,9 @@ const ServiceRequest = () => {
                 </LoadScript>
               </div>
 
+              <h2 className="text-2xl font-bold pt-[20px] text-[#283579]">
+                Customer Info
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
@@ -249,42 +254,6 @@ const ServiceRequest = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Attach image
-                    </label>
-                    <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                      <div className="space-y-1 text-center">
-                        {formData.image ? (
-                          <img
-                            src={formData.image}
-                            alt="Location"
-                            className="mx-auto h-32 w-auto"
-                          />
-                        ) : (
-                          <div className="flex flex-col items-center">
-                            <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                            <div className="flex text-sm text-gray-600">
-                              <label
-                                htmlFor="file-upload"
-                                className="relative cursor-pointer bg-white rounded-md font-medium text-[#283579] hover:text-blue-500"
-                              >
-                                <span>Upload a file</span>
-                                <input
-                                  id="file-upload"
-                                  name="file-upload"
-                                  type="file"
-                                  className="sr-only"
-                                  onChange={handleImageUpload}
-                                  accept="image/*"
-                                />
-                              </label>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
                       Price Range (SGD)
                     </label>
                     <div className="flex gap-4 mt-1">
@@ -320,7 +289,187 @@ const ServiceRequest = () => {
                 </div>
               </div>
             </div>
-            <div onClick={handleSubmit}>
+
+            <h2 className="text-2xl font-bold pt-[20px] text-[#283579]">
+              Service Details
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {config.questions.map((q, idx) => {
+                if (
+                  q.condition &&
+                  formData[q.condition.field] !== q.condition.value
+                )
+                  return null;
+                const label = (
+                  <label className="text-sm font-medium text-gray-700">
+                    {q.label}
+                  </label>
+                );
+
+                switch (q.type) {
+                  case "radio":
+                    return (
+                      <div key={idx} className="space-y-2">
+                        {label}
+                        <div className="flex flex-wrap gap-2">
+                          {q.options.map((opt) => (
+                            <Button
+                              key={opt}
+                              type="button"
+                              variant={
+                                formData[q.name] === opt ? "default" : "outline"
+                              }
+                              onClick={() =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  [q.name]: opt,
+                                }))
+                              }
+                            >
+                              {opt}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  case "dropdown":
+                    return (
+                      <div key={idx} className="space-y-2">
+                        {label}
+                        <select
+                          name={q.name}
+                          value={formData[q.name] || ""}
+                          onChange={handleInputChange}
+                          className="w-full border rounded-md px-3 py-2"
+                        >
+                          <option value="">Select</option>
+                          {q.options.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    );
+                  case "number":
+                  case "text":
+                    return (
+                      <div key={idx} className="space-y-2">
+                        {label}
+                        <Input
+                          type={q.type}
+                          name={q.name}
+                          value={formData[q.name] || ""}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    );
+                  case "textarea":
+                    return (
+                      <div key={idx} className="space-y-2">
+                        {label}
+                        <Textarea
+                          name={q.name}
+                          value={formData[q.name] || ""}
+                          onChange={handleInputChange}
+                          rows={4}
+                        />
+                      </div>
+                    );
+                  case "file":
+                    return (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Attach image
+                        </label>
+                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                          <div className="space-y-1 text-center">
+                            {formData.image ? (
+                              <img
+                                src={formData.image}
+                                alt="Location"
+                                className="mx-auto h-32 w-auto"
+                              />
+                            ) : (
+                              <div className="flex flex-col items-center">
+                                <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                                <div className="flex text-sm text-gray-600">
+                                  <label
+                                    htmlFor="file-upload"
+                                    className="relative cursor-pointer bg-white rounded-md font-medium text-[#283579] hover:text-blue-500"
+                                  >
+                                    <span>Upload a file</span>
+                                    <input
+                                      id="file-upload"
+                                      name="file-upload"
+                                      type="file"
+                                      className="sr-only"
+                                      onChange={handleImageUpload}
+                                      accept="image/*"
+                                    />
+                                  </label>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  case "checkbox":
+                    return (
+                      <div key={idx} className="space-y-2">
+                        {label}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                          {q.options.map((opt) => {
+                            const id = `${q.name}-${opt}`;
+                            const isChecked = formData[q.name]?.includes(opt);
+
+                            return (
+                              <label
+                                key={opt}
+                                htmlFor={id}
+                                className={`flex items-center space-x-2 border rounded-md px-3 py-2 cursor-pointer transition
+          ${
+            isChecked
+              ? "bg-blue-100 border-blue-500"
+              : "border-gray-300 hover:border-blue-400"
+          }`}
+                              >
+                                <input
+                                  id={id}
+                                  type="checkbox"
+                                  name={q.name}
+                                  value={opt}
+                                  checked={isChecked}
+                                  onChange={(e) => {
+                                    const val = formData[q.name] || [];
+                                    const updated = e.target.checked
+                                      ? [...val, opt]
+                                      : val.filter((v) => v !== opt);
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      [q.name]: updated,
+                                    }));
+                                  }}
+                                  className="accent-blue-500 w-4 h-4"
+                                />
+                                <span className="text-sm text-gray-800">
+                                  {opt}
+                                </span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  default:
+                    return null;
+                }
+              })}
+            </div>
+
+            <div className="pt-[20px]" onClick={handleSubmit}>
               <Button
                 type="submit"
                 className="w-full bg-[#283579] hover:bg-blue-600"
