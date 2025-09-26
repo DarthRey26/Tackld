@@ -30,18 +30,60 @@ const NewRequests = ({ requests, onAccept, onViewDetails }) => {
               }`}
             >
               <div className="flex justify-between items-start">
-                <div className="space-y-2">
+                <div className="space-y-2 flex-1">
                   <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-blue-500" />
-                    <span className="font-semibold">{request.name}</span>
+                    <h3 className="font-semibold text-lg text-gray-900">
+                      {request.service_id?.name || request.serviceType || 'Service Request'}
+                    </h3>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Clock className="h-4 w-4" />
-                    <span>{request.hours}</span>
+                  
+                  <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <span className="font-medium">Type:</span>
+                      <span className="capitalize">{request.bookingType || 'Standard'}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>
+                        {request.preferred_start ? 
+                          new Date(request.preferred_start).toLocaleDateString('en-SG', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          }) : 
+                          'ASAP'
+                        }
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-green-600">
-                    <DollarSign className="h-4 w-4" />
-                    <span>Price Range: ${request.minPrice} - ${request.maxPrice}</span>
+
+                  {request.customer_notes && (
+                    <div className="bg-gray-50 p-2 rounded text-sm">
+                      <span className="font-medium">Issue:</span> {request.customer_notes}
+                    </div>
+                  )}
+
+                  {request.images && request.images.length > 0 && (
+                    <div className="flex gap-2">
+                      <span className="text-sm font-medium">Images:</span>
+                      <div className="flex gap-1">
+                        {request.images.slice(0, 3).map((image, idx) => (
+                          <div key={idx} className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center text-xs text-blue-600">
+                            {idx + 1}
+                          </div>
+                        ))}
+                        {request.images.length > 3 && (
+                          <span className="text-xs text-gray-500">+{request.images.length - 3} more</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="text-sm text-gray-500">
+                    <MapPin className="h-4 w-4 inline mr-1" />
+                    Address provided after acceptance
                   </div>
                 </div>
                 <div className="flex gap-2">

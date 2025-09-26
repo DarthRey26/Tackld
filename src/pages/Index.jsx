@@ -1,108 +1,104 @@
-import React, { useState } from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AirVent, Wrench, Zap, Sparkles, Paintbrush } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import "../location.css";
 import AboutAndFAQ from "../components/AboutAndFAQ";
 import tackldBanner from "../assets/images/tackld-banner-final3.png";
-
 const Index = () => {
-  const [locations, setLocations] = useState([
-    {
-      name: "ION Orchard",
-      service: "Air conditioning repair",
-      date: "12 November 2024",
-      phone: "123-456-7890",
-      address: "#B4-06",
-      hours: "5 minutes ago",
-      mapSrc:
-        "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15955.140648154062!2d103.8319512!3d1.3039288!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x996bdb092f510665!2sION%20Orchard!5e0!3m2!1sen!2ssg!4v1670008616430!5m2!1sen!2ssg",
-      id: 1,
-    },
-    {
-      name: "Plaza Singapura",
-      service: "Plumbing",
-      date: "12 November 2024",
-      phone: "123-456-7890",
-      address: "#B1-07",
-      hours: "12 minutes ago",
-      mapSrc:
-        "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15955.162152516255!2d103.8452356!3d1.3005317!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x73f8899801be03cf!2sPlaza%20Singapura!5e0!3m2!1sen!2ssg!4v1670051991669!5m2!1sen!2ssg",
-      id: 2,
-    },
-    {
-      name: "200 Hougang Ave",
-      service: "Plumbing",
-      date: "12 November 2024",
-      phone: "123-456-7890",
-      address: "#13-06",
-      hours: "13 minutes ago",
-      mapSrc:
-        "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15955.140648154062!2d103.8319512!3d1.3039288!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x996bdb092f510665!2sION%20Orchard!5e0!3m2!1sen!2ssg!4v1670008616430!5m2!1sen!2ssg",
-      id: 3,
-    },
-    {
-      name: "OCBC Centre",
-      service: "Electrical",
-      date: "12 November 2024",
-      phone: "123-456-7890",
-      address: "Level 7",
-      hours: "16 minutes ago",
-      mapSrc:
-        "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15955.162152516255!2d103.8452356!3d1.3005317!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x73f8899801be03cf!2sPlaza%20Singapura!5e0!3m2!1sen!2ssg!4v1670051991669!5m2!1sen!2ssg",
-      id: 4,
-    },
-    {
-      name: "Bugis Junction",
-      service: "Air conditioning repair",
-      date: "12 November 2024",
-      phone: "123-456-7890",
-      address: "#01-06",
-      hours: "20 minutes ago",
-      mapSrc:
-        "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15955.140648154062!2d103.8319512!3d1.3039288!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x996bdb092f510665!2sION%20Orchard!5e0!3m2!1sen!2ssg!4v1670008616430!5m2!1sen!2ssg",
-      id: 5,
-    },
-  ]);
-
-  const SliderSection = () => {
-    return (
-      <div className="w-full p-0">
-        {/* <div className="text-3xl font-bold mb-6">Open requests</div> */}
-
-        <Carousel className="w-full mx-0">
-          <CarouselPrevious />
-          <CarouselContent className="w-full flex !pl-0 !ml-0">
-            {locations.map((location) => (
-              <CarouselItem
-                key={location.id}
-                className="flex-shrink-0 basis-full !pl-0 !ml-0"
-              >
-                <img
-                  src={tackldBanner}
-                  alt="Logo"
-                  className="w-full h-[600px] object-cover"
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselNext />
-        </Carousel>
-      </div>
-    );
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  const services = [{
+    id: "aircon",
+    name: "Aircon",
+    icon: AirVent,
+    description: "Installation, repair & maintenance",
+    color: "bg-blue-500"
+  }, {
+    id: "plumbing",
+    name: "Plumbing",
+    icon: Wrench,
+    description: "Pipes, toilets, sinks & water heaters",
+    color: "bg-green-500"
+  }, {
+    id: "electrical",
+    name: "Electrical",
+    icon: Zap,
+    description: "Wiring, outlets, switches & repairs",
+    color: "bg-yellow-500"
+  }, {
+    id: "cleaning",
+    name: "Cleaning",
+    icon: Sparkles,
+    description: "Home, office & post-renovation cleaning",
+    color: "bg-purple-500"
+  }, {
+    id: "painting",
+    name: "Painting",
+    icon: Paintbrush,
+    description: "Interior & exterior painting services",
+    color: "bg-orange-500"
+  }];
+  
+  const handleServiceClick = serviceId => {
+    if (user) {
+      navigate(`/book/${serviceId}`);
+    } else {
+      navigate("/login");
+    }
   };
-
+  const SliderSection = () => {
+    return <div className="w-full p-0 relative">
+        <img src={tackldBanner} alt="Tackld Banner" className="w-full h-[600px] object-cover" />
+        
+      </div>;
+  };
+  const ServicesSection = () => {
+    return <div className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Our Services
+            </h2>
+            <p className="text-lg text-gray-600">
+              Choose from our 5 core home services - all verified contractors, instant booking
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {services.map(service => {
+            const Icon = service.icon;
+            return <Card key={service.id} className="hover:shadow-lg transition-all duration-200 cursor-pointer group" onClick={() => handleServiceClick(service.id)}>
+                  <CardHeader className="text-center pb-4">
+                    <div className={`${service.color} w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200`}>
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <CardTitle className="text-xl font-bold text-gray-900">
+                      {service.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center pt-0">
+                    <p className="text-gray-600 text-sm mb-4">
+                      {service.description}
+                    </p>
+                    <Button className="w-full bg-[#283579] hover:bg-blue-700 text-white">
+                      Get Started
+                    </Button>
+                  </CardContent>
+                </Card>;
+          })}
+          </div>
+        </div>
+      </div>;
+  };
   const Info = () => {
     return <AboutAndFAQ />;
   };
-
   const Footer = () => {
-    return (
-      <footer className="bg-[#192252] text-white py-10">
+    return <footer className="bg-[#192252] text-white py-10">
         <div className="container mx-auto text-center">
           <p className="text-lg mb-4">© 2025 Tackld. All Rights Reserved.</p>
           <div>
@@ -117,17 +113,13 @@ const Index = () => {
             </a>
           </div>
         </div>
-      </footer>
-    );
+      </footer>;
   };
-
-  return (
-    <div className="overflow-x-hidden">
+  return <div className="overflow-x-hidden">
       {SliderSection()}
+      {ServicesSection()}
       {Info()}
       {Footer()}
-    </div>
-  );
+    </div>;
 };
-
 export default Index;

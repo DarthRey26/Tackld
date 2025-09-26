@@ -1,0 +1,25 @@
+1. Always refer to `spec.md` as the single source of truth. All logic, flows, and features must align with it.
+
+2. Do not generate or reference any additional `.md` files (e.g., `steps.md`, `memory.md`, etc.).
+
+3. Follow the framework and tech stack defined in `spec.md` (e.g., React, Express). Never substitute or introduce other stacks unless explicitly mentioned.
+
+4. All roles, permissions, and access control must follow what's outlined in `spec.md`.
+
+5. Simulate external integrations (e.g., Stripe, uploads) if marked as simulated in `spec.md`. Ensure simulated flows behave realistically.
+
+6. All forms must:
+   - Be resilient to refresh or navigation (use localStorage/sessionStorage if needed)
+   - Include validation, error handling, and loading states
+   - Prevent submission when incomplete
+
+7. Maintain responsive design across all screen sizes using the stack specified (e.g., Tailwind CSS).
+
+8. Handle edge cases gracefully:
+   - Unexpected refreshes
+   - Upload failures
+   - Broken routes/components
+
+9. All new components or routes must strictly serve documented user flows in `spec.md`.
+
+10. When unsure, halt generation and recheck `spec.md` for clarity.

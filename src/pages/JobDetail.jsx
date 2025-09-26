@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import routes from "@/routes/routes";
+import routes from "@/routes/routes.js";
 
 // Updated contractors list with isRecommended flags
 const contractors = [
@@ -42,10 +42,25 @@ const contractors = [
   },
 ];
 
+const PROGRESS_STAGES = [
+  "Finding Contractor",
+  "Contractor Found",
+  "Contractor Arriving",
+  "Job Started",
+  "Job Completed",
+  "Payment Settled",
+];
+
+const getInitialProgress = () => {
+  const saved = sessionStorage.getItem("jobProgressStage");
+  return saved ? parseInt(saved, 10) : 0;
+};
+
 const JobDetail = () => {
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [selectedContractor, setSelectedContractor] = useState(null);
+  const [progressStage, setProgressStage] = useState(getInitialProgress());
 
   useEffect(() => {
     const jobData = JSON.parse(sessionStorage.getItem("latestJob"));
@@ -54,9 +69,14 @@ const JobDetail = () => {
     }
   }, []);
 
+  useEffect(() => {
+    sessionStorage.setItem("jobProgressStage", progressStage);
+  }, [progressStage]);
+
   const handleConfirmContractor = () => {
     sessionStorage.removeItem("isJobInProgress");
     sessionStorage.removeItem("latestJob");
+    sessionStorage.removeItem("jobProgressStage");
     navigate(routes.customerMain);
   };
 
@@ -65,6 +85,12 @@ const JobDetail = () => {
       setSelectedContractor(null);
     } else {
       setSelectedContractor(contractor);
+    }
+  };
+
+  const handleNextStage = () => {
+    if (progressStage < PROGRESS_STAGES.length - 1) {
+      setProgressStage((prev) => prev + 1);
     }
   };
 
@@ -84,8 +110,43 @@ const JobDetail = () => {
             Job Details
           </CardTitle>
         </CardHeader>
-
         <CardContent className="space-y-10">
+          {/* Progress Bar Section */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-2">
+              {PROGRESS_STAGES.map((stage, idx) => (
+                <div key={stage} className="flex-1 flex flex-col items-center">
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
+                      idx <= progressStage ? "bg-green-500" : "bg-gray-300"
+                    }`}
+                  >
+                    {idx + 1}
+                  </div>
+                  <span
+                    className={`text-xs mt-1 text-center ${
+                      idx === progressStage ? "text-green-700 font-semibold" : "text-gray-500"
+                    }`}
+                  >
+                    {stage}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="w-full h-2 bg-gray-200 rounded-full">
+              <div
+                className="h-2 bg-green-500 rounded-full transition-all duration-500"
+                style={{ width: `${((progressStage + 1) / PROGRESS_STAGES.length) * 100}%` }}
+              ></div>
+            </div>
+            <div className="flex justify-end mt-2">
+              {progressStage < PROGRESS_STAGES.length - 1 && (
+                <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={handleNextStage}>
+                  Next Stage
+                </Button>
+              )}
+            </div>
+          </div>
           {/* Job Info Section */}
           <div className="space-y-6 text-sm text-gray-800">
             <div className="flex justify-between">
@@ -106,11 +167,11 @@ const JobDetail = () => {
             </div>
             <div className="flex justify-between">
               <span className="font-semibold">Date:</span>
-              <span>{new Date(job.date).toLocaleDateString()}</span>
+              <span>{job.date ? new Date(job.date).toLocaleDateString() : ""}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-semibold">Contractor type</span>
-              <span>Recommended</span>
+              <span className="font-semibold">Booking Type</span>
+              <span>{job.bookingType || "-"}</span>
             </div>
             {job.image ? (
               <img
@@ -124,7 +185,6 @@ const JobDetail = () => {
               </div>
             )}
           </div>
-
           {/* Contractor Selection */}
           <div className="mt-6">
             <h3 className="text-lg font-semibold mb-4 text-[#283579]">

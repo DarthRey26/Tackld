@@ -1,242 +1,228 @@
 export const serviceFormConfig = {
-  1: {
-    bookingTypes: ["Open Tender", "Saver", "Tackld’s Choice"],
+  aircon: {
+    title: "Air Conditioning Service",
     questions: [
       {
-        label: "What type of service?",
-        name: "serviceType",
-        type: "radio",
+        id: "serviceType",
+        label: "What type of service do you need?",
+        type: "select",
         options: ["Servicing", "Repair", "Installation"],
+        required: true
       },
-      { label: "How many units?", name: "unitCount", type: "number" },
       {
+        id: "unitCount",
+        label: "How many units?",
+        type: "number",
+        min: 1,
+        max: 10,
+        required: true
+      },
+      {
+        id: "unitType",
         label: "Unit Type?",
-        name: "unitType",
-        type: "dropdown",
+        type: "select",
         options: ["Wall-mounted", "Cassette", "Window", "Portable"],
+        required: true
       },
-      { label: "Unit age (if known)?", name: "unitAge", type: "number" },
       {
+        id: "unitAge",
+        label: "Unit age (if known)?",
+        type: "number",
+        min: 0,
+        max: 50,
+        required: false
+      },
+      {
+        id: "knownIssues",
         label: "Any known issues?",
-        name: "knownIssues",
         type: "textarea",
-        optional: true,
+        required: false,
+        maxLength: 500
       },
       {
-        label: "Is this HDB, Condo, or Landed?",
-        name: "propertyType",
-        type: "dropdown",
+        id: "propertyType",
+        label: "Property Type",
+        type: "select",
         options: ["HDB", "Condo", "Landed"],
-      },
-      {
-        label: "Image of unit & model number",
-        name: "unitImage",
-        type: "file",
-      },
-      {
-        condition: { field: "serviceType", value: "Installation" },
-        label: "Is piping already installed?",
-        name: "hasPiping",
-        type: "radio",
-        options: ["Yes", "No"],
-      },
-      {
-        condition: { field: "serviceType", value: "Repair" },
-        label: "Describe the fault",
-        name: "repairDescription",
-        type: "textarea",
-        optional: true,
-      },
-      {
-        condition: { field: "serviceType", value: "Repair" },
-        label: "Attach a video (optional)",
-        name: "repairVideo",
-        type: "file",
-        optional: true,
-      },
-    ],
+        required: true
+      }
+    ]
   },
-  2: {
-    bookingTypes: ["Open Tender", "Saver", "Tackld’s Choice"],
+  cleaning: {
+    title: "House Cleaning Service",
     questions: [
       {
-        label: "What needs to be done?",
-        name: "taskType",
-        type: "radio",
-        options: ["Repair", "Installation"],
-      },
-      {
-        label: "What are affected?",
-        name: "affectedItems",
-        type: "checkbox",
-        options: ["Sink", "Toilet", "Tap", "Floor Trap", "Piping", "Heater"],
-      },
-      {
-        label: "How many appliances affected?",
-        name: "applianceCount",
-        type: "number",
-      },
-      {
-        label: "Water valve accessible?",
-        name: "valveAccessible",
-        type: "radio",
-        options: ["Yes", "No"],
-      },
-      {
-        label: "Is this urgent or emergency?",
-        name: "urgency",
-        type: "dropdown",
-        options: ["Normal", "Urgent", "Emergency"],
-      },
-      {
-        label: "Image(s) of affected area",
-        name: "areaImages",
-        type: "file",
-        multiple: true,
-      },
-    ],
-  },
-  3: {
-    bookingTypes: ["Open Tender", "Saver", "Tackld’s Choice"],
-    questions: [
-      {
-        label: "What do you need?",
-        name: "electricalNeed",
-        type: "radio",
-        options: ["Repair only"],
-      },
-      {
-        label: "Type of issue or item?",
-        name: "electricalItems",
-        type: "checkbox",
-        options: ["Power socket", "Fan", "Light", "Heater", "Oven", "Circuit"],
-      },
-      {
-        label: "Any power failure?",
-        name: "powerFailure",
-        type: "radio",
-        options: ["Yes", "No"],
-      },
-      {
-        label: "Do you already have the part?",
-        name: "havePart",
-        type: "radio",
-        options: ["Yes", "No"],
-      },
-      {
-        label: "Do you need help sourcing a part?",
-        name: "needHelpPart",
-        type: "radio",
-        options: ["Yes", "No"],
-        optional: true,
-      },
-      {
-        label: "Image of affected fixture or area",
-        name: "fixtureImage",
-        type: "file",
-        multiple: true,
-      },
-    ],
-  },
-  4: {
-    bookingTypes: ["Open Tender", "Saver", "Tackld’s Choice"],
-    questions: [
-      {
+        id: "cleaningType",
         label: "Type of cleaning?",
-        name: "cleaningType",
-        type: "radio",
-        options: ["General", "Post-Reno", "Move-in/out"],
+        type: "select",
+        options: ["General", "Post-Renovation", "Move-in/Move-out"],
+        required: true
       },
       {
+        id: "propertyType",
         label: "Property type?",
-        name: "cleaningPropertyType",
-        type: "dropdown",
+        type: "select",
         options: ["HDB", "Condo", "Landed", "Office"],
-      },
-      { label: "How many rooms?", name: "roomCount", type: "number" },
-      {
-        label: "How many hours?",
-        name: "cleaningHours",
-        type: "dropdown",
-        options: ["1", "2", "3", "4", "5+"],
+        required: true
       },
       {
+        id: "roomCount",
+        label: "How many rooms?",
+        type: "number",
+        min: 1,
+        max: 20,
+        required: true
+      },
+      {
+        id: "cleaningHours",
+        label: "Estimated hours needed?",
+        type: "select",
+        options: ["1-2 hours", "2-4 hours", "4-6 hours", "Full day"],
+        required: true
+      },
+      {
+        id: "focusAreas",
         label: "Areas of focus?",
-        name: "focusAreas",
         type: "checkbox",
-        options: ["Kitchen", "Windows", "Toilet", "Fans"],
+        options: ["Kitchen", "Bathrooms", "Windows", "Ceiling fans", "Appliances"],
+        required: true
       },
       {
-        label: "Do you have cleaning tools?",
-        name: "hasTools",
-        type: "radio",
-        options: ["Yes", "No"],
-      },
-      {
-        label: "Upload images of area to be cleaned",
-        name: "cleaningImages",
-        type: "file",
-        multiple: true,
-      },
-    ],
+        id: "hasTools",
+        label: "Do you have cleaning supplies?",
+        type: "select",
+        options: ["Yes, I have everything", "No, please bring supplies", "Partial - need some items"],
+        required: true
+      }
+    ]
   },
-  5: {
-    bookingTypes: ["Fixed"],
-    fixedFee: 35,
+  painting: {
+    title: "Painting Service",
     questions: [
       {
-        label: "What type of property?",
-        name: "paintingPropertyType",
-        type: "dropdown",
+        id: "propertyType",
+        label: "Property type?",
+        type: "select",
         options: ["HDB", "Condo", "Landed", "Office"],
+        required: true
       },
       {
-        label: "How many rooms do you want painted?",
-        name: "paintingRoomCount",
+        id: "roomCount",
+        label: "How many rooms to paint?",
         type: "number",
+        min: 1,
+        max: 20,
+        required: true
       },
       {
+        id: "paintingType",
         label: "Type of painting?",
-        name: "paintingType",
-        type: "radio",
-        options: ["Interior", "Exterior", "Both"],
+        type: "select",
+        options: ["Interior only", "Exterior only", "Both interior and exterior"],
+        required: true
       },
       {
-        label: "Estimated size of area?",
-        name: "paintingAreaSize",
-        type: "numberWithUnit",
-        units: ["sqm", "sqft"],
+        id: "areaSize",
+        label: "Estimated area size (sqm)?",
+        type: "number",
+        min: 10,
+        max: 1000,
+        required: true
       },
       {
-        label: "Do you need wrapping services?",
-        name: "wrappingService",
-        type: "radio",
-        options: ["Yes", "No"],
+        id: "wallCondition",
+        label: "Current wall condition?",
+        type: "select",
+        options: ["Good condition", "Minor cracks/holes", "Major repairs needed"],
+        required: true
       },
       {
-        label: "Do you already have a preferred paint?",
-        name: "preferredPaint",
-        type: "radio",
-        options: ["Yes", "No"],
-      },
-      {
-        condition: { field: "preferredPaint", value: "Yes" },
-        label: "If yes, what brand/type?",
-        name: "paintBrand",
-        type: "text",
-      },
-      {
-        label: "Upload layout photos and rooms",
-        name: "layoutPhotos",
-        type: "file",
-        multiple: true,
-      },
-      {
-        label: "Choose colour palette",
-        name: "colorPalette",
-        type: "dropdown",
-        options: ["Warm Tones", "Cool Tones", "Neutral", "Custom"],
-      },
-    ],
+        id: "colorPreference",
+        label: "Color preference?",
+        type: "select",
+        options: ["White/Neutral", "Warm colors", "Cool colors", "Custom colors"],
+        required: true
+      }
+    ]
   },
+  plumbing: {
+    title: "Plumbing Service",
+    questions: [
+      {
+        id: "issueType",
+        label: "What type of plumbing issue?",
+        type: "select",
+        options: ["Leak repair", "Pipe installation", "Toilet issues", "Sink/tap problems", "Water heater", "General maintenance"],
+        required: true
+      },
+      {
+        id: "urgency",
+        label: "How urgent is this?",
+        type: "select",
+        options: ["Emergency (immediate)", "Urgent (within 24hrs)", "Normal (within a week)"],
+        required: true
+      },
+      {
+        id: "affectedItems",
+        label: "What items are affected?",
+        type: "checkbox",
+        options: ["Kitchen sink", "Bathroom sink", "Toilet", "Shower", "Water heater", "Pipes", "Floor trap"],
+        required: true
+      },
+      {
+        id: "waterAccess",
+        label: "Can you access the main water valve?",
+        type: "select",
+        options: ["Yes", "No", "Not sure"],
+        required: true
+      },
+      {
+        id: "problemDescription",
+        label: "Describe the problem in detail",
+        type: "textarea",
+        required: true,
+        maxLength: 500
+      }
+    ]
+  },
+  electrical: {
+    title: "Electrical Service",
+    questions: [
+      {
+        id: "issueType",
+        label: "What electrical issue do you have?",
+        type: "select",
+        options: ["Power outlet not working", "Light fixture issues", "Fan problems", "Circuit breaker tripping", "Wiring problems", "Installation needed"],
+        required: true
+      },
+      {
+        id: "powerStatus",
+        label: "Is there any power failure?",
+        type: "select",
+        options: ["Complete power loss", "Partial power loss", "No power loss"],
+        required: true
+      },
+      {
+        id: "affectedAreas",
+        label: "Which areas are affected?",
+        type: "checkbox",
+        options: ["Living room", "Bedroom", "Kitchen", "Bathroom", "Entire house"],
+        required: true
+      },
+      {
+        id: "hasSpare",
+        label: "Do you have replacement parts?",
+        type: "select",
+        options: ["Yes", "No", "Need help sourcing"],
+        required: true
+      },
+      {
+        id: "safetyNote",
+        label: "Safety concerns or additional notes",
+        type: "textarea",
+        required: false,
+        maxLength: 300
+      }
+    ]
+  }
 };
